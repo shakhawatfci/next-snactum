@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AdminLayout from "../components/layouts/AdminLayout"
 import authMiddleware from "../middleware/authMiddleware";
+import axios  from "../util/server";
 // import Cookies from "js-cookie";
 export default function SessionList() {
   
@@ -12,6 +13,19 @@ export default function SessionList() {
         status : ''
 
     });
+
+    // useEffect(() => {
+    //     getSessionList();
+    // }
+    // , []);
+
+    // const getSessionList = async () => {
+    //     const res = await axios.get('session-list');
+    //     console.log(res.data);
+    // }
+
+
+
 
   return (
     <AdminLayout>
@@ -173,4 +187,25 @@ export default function SessionList() {
   )
 }
 
-export const getServerSideProps = async (context)=>  authMiddleware(context , {});
+export const getServerSideProps = async (context) => {
+    authMiddleware(context , {});
+
+    const  data = await axios.get(`session-list`);
+
+     console.log(data.data);
+
+    return { props: {   } };
+
+} 
+
+// export async function getServerSideProps() {
+//     // Fetch data from external API
+
+
+//     const res = await fetch(`https://.../data`)
+//     const data = await res.json()
+  
+//     // Pass data to the page via props
+//     return { props: { data } }
+//   }
+  

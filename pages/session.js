@@ -2,22 +2,84 @@ import { useEffect, useState } from "react";
 import AdminLayout from "../components/layouts/AdminLayout"
 import authMiddleware from "../middleware/authMiddleware";
 import axios  from "../util/server";
+import Pagination from "react-js-pagination";
+
+import Router, { withRouter } from 'next/router'
+
+import Link from "next/link";
 // import Cookies from "js-cookie";
-export default function SessionList() {
+
+const initState = {
+    teacher_id : '',
+    session_for : '',
+    parent_id : '',
+    student_id : '',
+    status : '',
+    page : 1,
+};
+
+export default function SessionList({ sessionData }) {
   
-    const [filterData , setFilter ] = useState({
-        teacher_id : '',
-        session_for : '',
-        parent_id : '',
-        student_id : '',
-        status : ''
+    const [filterData , setFilter ] = useState(initState);
 
-    });
+    const [studentList , setStudentList] = useState([]);
 
-    // useEffect(() => {
-    //     getSessionList();
-    // }
-    // , []);
+
+    const onPageChange =  (pageNumber) => {
+            const data = {
+                ...filterData,
+                page: pageNumber
+            };
+            setFilter({...filterData, page : pageNumber});
+            refreshData(data);
+    }
+
+    useEffect(() => {
+        getStudentList();
+    }
+    , []);
+
+    const getStudentList = () => {
+
+        const data = {
+            ...filterData,
+            no_pagination: 'yes'
+        };
+
+        let queryString = Object.keys(data).map(key => key + '=' + data[key]).join('&');
+   
+        axios.get(`/student-list?${queryString}`)
+        .then(res => {
+            setStudentList(res.data.data.students.data);
+            // console.log(res.data.data.students.data);
+        });
+    }
+
+    const refreshData =  (data) => {
+        let queryString = Object.keys(data).map(key => key + '=' + data[key]).join('&');
+        Router.push(`session?${queryString}`);
+    } 
+
+    const handleChange = (e) => {
+        const data = {
+            ...filterData,
+            [e.target.name]: e.target.value.trim(),
+            page : 1
+          };
+
+        setFilter(data);
+
+        refreshData(data);
+    }
+
+    const resetFilter = () => {
+
+        setFilter(initState);
+        Router.push('session');
+    }
+
+    
+
 
     // const getSessionList = async () => {
     //     const res = await axios.get('session-list');
@@ -62,7 +124,7 @@ export default function SessionList() {
                   
                  <div className="col-md-3 mb-3">
                     <label className="form-label" for="formrow-email-input">Select Teacher</label>
-                    <select className="form-control select2" name="teacher_id">
+                    <select className="form-control select2" value={filterData.teacher_id} name="teacher_id" onChange={(e) => handleChange(e)}>
                       <option value="">All Teacher</option>
                         <option  value="4">Leah Duncan</option>
                         <option  value="10">Leo Pickett</option>
@@ -78,7 +140,7 @@ export default function SessionList() {
                   
                   <div className="col-md-3 mb-3">
                     <label className="form-label">Session For</label>
-                    <select className="form-control select2" id="session-type" name="session_for">
+                    <select className="form-control select2" id="session-type" value={filterData.session_for} onChange={(e) => handleChange(e)} name="session_for">
                       <option value="">All</option>
                       <option  value="Individual">Individual</option>
                       <option  value="Institute">Institute</option>
@@ -87,7 +149,7 @@ export default function SessionList() {
 
                   <div className="col-md-3 mb-3">
                     <label className="form-label" for="formrow-email-input" id="parent-label">Choose Parent/Institute</label>
-                    <select name="parent_id" className="form-control select2" id="all-parent">
+                    <select name="parent_id" className="form-control select2" value={filterData.parent_id} id="all-parent" onChange={(e) => handleChange(e)}>
                             <option value="">Choose Parent/Institute</option> 
                     </select>
                   </div> 
@@ -95,30 +157,18 @@ export default function SessionList() {
                                                       
                   <div className="col-md-3 mb-3">
                     <label className="form-label">Students</label>
-                    <select className="form-control select2" name="student_id" id="students">
+                    <select className="form-control select2" value={filterData.student_id} name="student_id" id="students" onChange={(e) => handleChange(e) }>
                       <option value="">All Students</option>
-                        <option  value="5">Ryder Kaufman</option>
-                        <option  value="6">Serena Barrera</option>
-                        <option  value="8">Sloane Douglas</option>
-                        <option  value="9">Joel Griffin</option>
-                        <option  value="11">Shakhawat hossain</option>
-                        <option  value="15">shakhawat ssl</option>
-                        <option  value="26">Baxter Guzman</option>
-                        <option  value="27">Violet Soto</option>
-                        <option  value="28">Gretchen Mclaughlin</option>
-                        <option  value="29">Raja Carter</option>
-                        <option  value="30">Hedley Sparks</option>
-                        <option  value="31">Ishmael Savage</option>
-                        <option  value="32">Kamrul Touhid</option>
-                        <option  value="33">Sultan</option>
-                        <option  value="35">Scott Travis</option>
+                        {studentList.map((student, index) => (
+                        <option  value={student.id} key={`student${index}`}>{student.name}</option>
+                        ))}
                     </select>
                   </div>
                   
                   
                   <div className="col-md-3 mb-3">
                     <label className="form-label">Session Status</label>
-                    <select className="form-control select2" name="status">
+                    <select className="form-control select2" value={filterData.status}  name="status" onChange={(e) => handleChange(e) }>
                     <option value="">All Status</option>
                     <option  value="Pending">Pending</option>
                     <option  value="Ongoing">Ongoing</option>
@@ -131,7 +181,7 @@ export default function SessionList() {
                   <div className="col-md-3 mb-2">
                     <label className="form-label">&nbsp;</label>
                     <div>
-                      <a href="http://localhost:8000/session/schedule/list" className="btn btn-outline-primary w-sm me-2">Reset</a>
+                      <button type="button" onClick={() => resetFilter()} className="btn btn-outline-primary w-sm me-2">Reset</button>
                       <button type="submit" className="btn btn-primary w-sm">Submit</button>
                     </div>
                   </div>
@@ -167,11 +217,47 @@ export default function SessionList() {
                     </tr>
                   </thead>
 
+                  <tbody>
+                {sessionData?.data?.map((session, index) => (
+                    <tr key={index}>
+                        <td>{session.teacher.name}</td>
+                        <td>{session.session_start_time}</td>
+                        <td>{session.session_end_time}</td>
+                        <td>{session.total_student}</td>
+                        <td>{session.session_medium}</td>
+                        <td>{session.session_for}</td>
+                        <td>{session.repeat}</td>
+                        <td>{session.status}</td>
+                        <td>{session.invoice_status}</td>
+                        <td className="text-end">
+                            <Link href={`session/${session.id}`} >
+                                <a className="btn btn-primary btn-sm">View</a>
+                                </Link>
+                            <a href={`/session/schedule/delete/${session.id}`} className="btn btn-outline-danger btn-sm">View</a>
+                        </td>
+                        
+                    </tr>
+                ))}
+
+                  </tbody>
+
                 </table>
               </div>
               <div className="d-flex justify-content-end mt-2">
                
-               {/* pagination will be here  */}
+                                   <Pagination
+                                    activePage={sessionData?.meta?.current_page ? sessionData?.meta?.current_page: 0}
+                                    itemsCountPerPage={sessionData?.meta?.per_page ? sessionData?.meta?.per_page : 0 }
+                                    totalItemsCount={sessionData?.meta?.total ? sessionData?.meta?.total : 0}
+                                    onChange={(pageNumber) => {
+                                        onPageChange(pageNumber)
+                                    }}
+                                    pageRangeDisplayed={8}
+                                    itemClass="page-item"
+                                    linkClass="page-link"
+                                    firstPageText="First Page"
+                                    lastPageText="Last Lage"
+                                />
 
               </div>
 
@@ -188,24 +274,18 @@ export default function SessionList() {
 }
 
 export const getServerSideProps = async (context) => {
+
+    let queryString = context.req.url.split('?')[1];
+    
     authMiddleware(context , {});
 
-    const  data = await axios.get(`session-list`);
+    const  response  = await axios.get(`session-list?${queryString}`);
 
-     console.log(data.data);
+    const sessionData = response.data.data.session_list;
 
-    return { props: {   } };
+
+    return { props: {  sessionData  } };
 
 } 
 
-// export async function getServerSideProps() {
-//     // Fetch data from external API
-
-
-//     const res = await fetch(`https://.../data`)
-//     const data = await res.json()
-  
-//     // Pass data to the page via props
-//     return { props: { data } }
-//   }
   

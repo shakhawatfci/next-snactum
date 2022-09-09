@@ -4,7 +4,7 @@ import Cookies from 'js-cookie'
 // import nextCookie from "next-cookies";
 
 
-axios.defaults.baseURL = 'http://127.0.0.1:8000/api/v1/'
+axios.defaults.baseURL =  "https://tutor.publicdemo.xyz/api/v1/";
 
 const apiInstance = axios.create()
 
@@ -19,10 +19,8 @@ const apiInstance = axios.create()
 apiInstance.interceptors.request.use(
     async config => {
         // const token = await AsyncStorage.getItem('userToken')
-        // const token = Cookies.get('access_token'); 
+        const token = Cookies.get('access_token'); 
 
-        const token = "17|kWkTZz1arrM1mVUhrgfMlGfYyFooFN0okAuDJha8";
-        //console.log(token)
         if (token) {
             config.headers.Authorization = 'Bearer ' + token
             //console.log(config.headers.Authorization)

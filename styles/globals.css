@@ -1,26 +1,60 @@
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+         
+    .btn-grad {
+      background-image: linear-gradient(90deg,#25aae1,#4481eb,#04befe,#3f86ed);
+    /* margin: 10px;
+    padding: 15px 45px; */
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white !important;            
+    /* box-shadow: 0 0 20px #eee; */
+    border-radius: 10px;
+    display: block;
   }
-  body {
-    color: white;
-    background: black;
+
+  .btn-grad:hover {
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
   }
-}
+
+  .counter {
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    text-align: center;
+    line-height: 70px;
+    font-size: 35px;
+  }
+
+  .counter-green {
+    background-color:rgb(177, 247, 218);
+    color: rgb(0, 128, 122);
+  }
+  .counter-purple {
+    background-color:rgb(239, 206, 242);
+    color: rgb(102, 0, 128);
+  }
+  .counter-blue {
+    background-color:rgb(206, 225, 242);
+    color: rgb(24, 118, 180);
+  }
+  .counter-orange {
+    background-color:rgba(245, 230, 201, 0.877);
+    color: rgb(248, 177, 25);
+  }
+
+  .counter-number
+  {
+    font-weight: bold;
+    font-size: 18px;
+    margin-top: 15px;
+  }
+  .counter-title
+  {
+    font-weight: bold;
+    font-size: 15px;
+    margin-top: -10px;
+  }
+       

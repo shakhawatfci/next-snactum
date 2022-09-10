@@ -3,14 +3,16 @@
   import authMiddleware from "../middleware/authMiddleware";
   import axios  from "../util/server";
   import Pagination from "react-js-pagination";
-
-  import {getAllStudent,getAllTeacher , getAllInstitute , getAllParent} from "../util/common_api"
+  import Dropdown from 'react-bootstrap/Dropdown';
+  import DropdownButton from 'react-bootstrap/DropdownButton';
+  import { FaAlignRight } from "react-icons/fa";
 
   import Router, { withRouter , useRouter } from 'next/router'
 
   import Link from "next/link";
+  import SessionFilter from "../components/session/SessionFilter";
   // import Cookies from "js-cookie";
-
+  import MetaHeader from "../components/MetaHeader";
   const initState = {
       teacher_id : '',
       session_for : '',
@@ -23,20 +25,10 @@
   export default function SessionList() {
     
       const [filterData , setFilter ] = useState(initState);
-      const [studentList , setStudentList] = useState([]);
-      const [teacherList , setTeacherList] = useState([]);
-      const [parentList , setParentList] = useState([]);
       const [sessionData , setSessionList] = useState(null);
       const [isSessionLoading,updateLoader] = useState(false);
       const { query } = useRouter();
 
-
-
-      useEffect(() => {
-          getStudentList();
-          getTeacherList();
-      }
-      , []);
 
       useEffect(() => {
           getSessionList();
@@ -54,75 +46,6 @@
        }
       
 
-      const getStudentList = () => {
-
-          getAllStudent()
-          .then(res => {
-              setStudentList(res.data.data.students.data);
-          });
-      }
-      const getTeacherList = () => {
-
-          getAllTeacher()
-          .then(res => {
-              // console.log(res.data);
-              setTeacherList(res.data.data.teachers);
-          });
-      }
-
-
-      const getInstituteList = () => {
-
-          getAllInstitute()
-          .then(res => {
-              // console.log(res.data);
-              setParentList(res.data.data.institutes);
-          });
-      }
-      const getParentList = () => {
-
-          getAllParent()
-          .then(res => {
-              // console.log(res.data);
-              setParentList(res.data.data.parent);
-          });
-      }
-
-      // const refreshData =  (data) => {
-      //     let queryString = Object.keys(data).map(key => key + '=' + data[key]).join('&');
-      //     Router.push(`session?${queryString}`);
-      // } 
-
-      const handleChange = (e) => {
-          const data = {
-              ...filterData,
-              [e.target.name]: e.target.value.trim(),
-              page : 1
-            };
-
-          setFilter(data);
-          
-          if(e.target.name == 'session_for')
-          {
-
-            if(e.target.value == 'Individual')
-            {
-              getParentList();
-            }
-            else if(e.target.value == 'Institute')
-            {
-              getInstituteList();
-            }
-            else
-            {
-              setParentList([]);
-            }
-
-          }
-
-
-          // refreshData(data);
-      }
 
       const resetFilter = () => {
 
@@ -152,6 +75,7 @@
     return (
       <AdminLayout>
       <div className="container mt-2">
+        <MetaHeader pageTitle={'Session List'} />
           {/* design a dashboard with some stats like total session totla student and total teacher  */}
           <div className="row">
           <div className="col-12">
@@ -167,87 +91,9 @@
           </div>
         </div>
 
-        <form>
-        <div className="row mt-2">
-          <div className="col-lg-12">
-            <div className="card">
-              <div className="card-header">
-                <a className="icon-demo-content d-flex justify-content-between align-items-center"
-                  data-bs-toggle="collapse" href="#collapseExample2" aria-expanded="false"
-                  aria-controls="collapseExample2">
-                    List
-                </a>
-              </div>
-              <div className="collapse show" id="collapseExample2">
-                <div className="card-body pb-0">
-                  <div className="row">
-                    
-                  <div className="col-md-3 mb-3">
-                      <label className="form-label" for="formrow-email-input">Select Teacher</label>
-                      <select className="form-control select2" value={filterData.teacher_id} name="teacher_id" onChange={(e) => handleChange(e)}>
-                        <option value="">All Teacher</option>
-                          {teacherList.map((teacher , index) => (
-                            <option  value={teacher.id}>{teacher.name}</option>
-                          )) }
-                      </select>
-                    </div>
-                    
-                    <div className="col-md-3 mb-3">
-                      <label className="form-label">Session For</label>
-                      <select className="form-control select2" id="session-type" value={filterData.session_for} onChange={(e) => handleChange(e)} name="session_for">
-                        <option value="">All</option>
-                        <option  value="Individual">Individual</option>
-                        <option  value="Institute">Institute</option>
-                      </select>
-                    </div>
-
-                    <div className="col-md-3 mb-3">
-                      <label className="form-label" for="formrow-email-input" id="parent-label">Choose Parent/Institute</label>
-                      <select name="parent_id" className="form-control select2" value={filterData.parent_id} id="all-parent" onChange={(e) => handleChange(e)}>
-                              <option value="">Choose Parent/Institute</option> 
-                          {parentList.map((parent, index) => (
-                          <option  value={parent.id} key={`parent${index}`}>{parent.user_type == 'Parent' ? parent.name : parent.institution_name }</option>
-                          ))}
-                      </select>
-                    </div> 
-
-                                                        
-                    <div className="col-md-3 mb-3">
-                      <label className="form-label">Students</label>
-                      <select className="form-control select2" value={filterData.student_id} name="student_id" id="students" onChange={(e) => handleChange(e) }>
-                        <option value="">All Students</option>
-                          {studentList.map((student, index) => (
-                          <option  value={student.id} key={`student${index}`}>{student.name}</option>
-                          ))}
-                      </select>
-                    </div>
-                    
-                    
-                    <div className="col-md-3 mb-3">
-                      <label className="form-label">Session Status</label>
-                      <select className="form-control select2" value={filterData.status}  name="status" onChange={(e) => handleChange(e) }>
-                      <option value="">All Status</option>
-                      <option  value="Pending">Pending</option>
-                      <option  value="Ongoing">Ongoing</option>
-                      <option  value="Completed">Completed</option>
-                      <option  value="Billable Cancellation">Billable Cancellation</option>
-                      <option  value="Non-Billable Cancellation">Non-Billable Cancellation</option>
-                      </select>
-                    </div>
-
-                    <div className="col-md-3 mb-2">
-                      <label className="form-label">&nbsp;</label>
-                      <div>
-                        <button type="button" onClick={() => resetFilter()} className="btn btn-outline-primary w-sm me-2">Reset</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
+         {/* import session filter here  */}
+         <SessionFilter filterData={filterData} setFilter={setFilter} resetFilter={resetFilter}  />
+         {/* import session filter here  */}
 
         <div className="row mt-2">
           <div className="col-12">
@@ -262,8 +108,7 @@
                     <thead>
                       <tr>     
                       <th>Teacher</th>
-                      <th>Start Date</th>
-                      <th>End Date</th>
+                      <th>Date Time</th>
                       <th>Student Enrolled</th>
                       <th>Type</th>
                       <th>Session For</th>
@@ -277,18 +122,23 @@
                   {sessionData?.data?.map((session, index) => (
                       <tr key={index}>
                           <td>{session.teacher.name}</td>
-                          <td>{session.session_start_time}</td>
-                          <td>{session.session_end_time}</td>
-                          <td>{session.total_student}</td>
+                          <td>
+                           <p>{session.session_end_time}</p>
+                           <p>{session.session_start_time}</p> 
+                          </td>
+                          <td>
+                            {session.student_list.length == 1 ? session.student_list[0].name  : `${session.student_list[0].name} + (${session.student_list.length-1})`   }
+                          </td>
                           <td>{session.session_medium}</td>
                           <td>{session.session_for}</td>
                           <td>{session.status}</td>
                           <td>{session.invoice_status}</td>
                           <td className="text-end">
-                              <Link href={`session/${session.id}`} >
-                                  <a className="btn btn-primary btn-sm">View</a>
-                                  </Link>
-                              <a href={`/session/schedule/delete/${session.id}`} className="btn btn-outline-danger btn-sm">View</a>
+                          <DropdownButton id="dropdown-basic-button" variant="outline-secondary" title={<FaAlignRight />}>
+                          <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                          <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                          <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                          </DropdownButton>
                           </td>
                           
                       </tr>
@@ -300,19 +150,19 @@
                 </div>) : (<div> <h3>Loading...</h3> </div>) }
                 <div className="d-flex justify-content-end mt-2">
                 
-                                    <Pagination
-                                      activePage={sessionData?.meta?.current_page ? sessionData?.meta?.current_page: 0}
-                                      itemsCountPerPage={sessionData?.meta?.per_page ? sessionData?.meta?.per_page : 0 }
-                                      totalItemsCount={sessionData?.meta?.total ? sessionData?.meta?.total : 0}
-                                      onChange={(pageNumber) => {
-                                          onPageChange(pageNumber)
-                                      }}
-                                      pageRangeDisplayed={8}
-                                      itemClass="page-item"
-                                      linkClass="page-link"
-                                      firstPageText="First Page"
-                                      lastPageText="Last Lage"
-                                  />
+                    <Pagination
+                      activePage={sessionData?.meta?.current_page ? sessionData?.meta?.current_page: 0}
+                      itemsCountPerPage={sessionData?.meta?.per_page ? sessionData?.meta?.per_page : 0 }
+                      totalItemsCount={sessionData?.meta?.total ? sessionData?.meta?.total : 0}
+                      onChange={(pageNumber) => {
+                          onPageChange(pageNumber)
+                      }}
+                      pageRangeDisplayed={8}
+                      itemClass="page-item"
+                      linkClass="page-link"
+                      firstPageText="First Page"
+                      lastPageText="Last Lage"
+                  />
 
                 </div>
 

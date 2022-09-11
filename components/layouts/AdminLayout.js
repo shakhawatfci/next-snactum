@@ -7,7 +7,10 @@ export default function AdminLayout({ children }) {
         <div>
 
             <MainNav/>
-            <Toaster position="top-right"/>
+            <div>
+                <Toaster position="top-right" /> 
+            </div>
+           
             {children}
 
         </div>

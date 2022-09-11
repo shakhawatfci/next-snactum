@@ -8,13 +8,11 @@ export function showValidationErrors(err)
 
       if(errors)
       {
-        errors.forEach((value) => {
-            toast.error(value); 
-        })
+       errorMessage(errors);
       }
       else
       {
-        toast.error('Network error !');
+        errorMessage('Network error !');
       }
 
     }
@@ -26,9 +24,50 @@ export function showValidationErrors(err)
 
 export function successMessage($message = 'Request Successfull')
 {
+
     toast.success($message);
 }
 export function errorMessage($message = 'Request Failed')
 {
-    toast.error($message);
+    if(typeof $message == 'object')
+    {
+      $message.forEach((value) => {
+        toast.error(value);
+      })
+    }
+    else
+    {
+      toast.error($message);
+    }
+    
+}
+
+export const sessionFormData = {
+  session_medium:"",
+  session_type:"",
+  institute_id:"",
+  students:[],
+  teacher_id:"",
+  milage:"",
+  session_start_time:"",
+  session_end_time:"",
+  cost:"",
+  description:"",
+  online_link:"",
+  street_address_1:"",
+  street_address_2:"",
+  city:"",
+  country_id:1,
+  region_id:"",
+  zip_code:"",
+  repeat:0,
+  repeat_type:"",
+  repeat_end_date:"",
+  repeat_sunday:"",
+  repeat_monday:"",
+  repeat_tuesday:"",
+  repeat_wednesday:"",
+  repeat_thursday:"",
+  repeat_friday:"",
+  repeat_saturday:"",
 }

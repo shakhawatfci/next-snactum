@@ -1,5 +1,5 @@
 import MainNav from "../Navbar";
-
+import  { Toaster } from 'react-hot-toast';
 
 export default function AdminLayout({ children }) {
 
@@ -7,7 +7,7 @@ export default function AdminLayout({ children }) {
         <div>
 
             <MainNav/>
-
+            <Toaster position="top-right"/>
             {children}
 
         </div>

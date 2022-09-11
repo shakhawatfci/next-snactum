@@ -4,22 +4,29 @@ import axios from '../util/server';
 import { useRouter } from "next/router";
 import guestMiddleware from "../middleware/guestMiddleware";
 
+import  { Toaster } from 'react-hot-toast';
+import { showValidationErrors , successMessage } from "../util/helper";
+
 export default function Login()
 {
     const router = useRouter();
     const [loginData , setForm ] = useState({ email : '', password : '' });
+    const [isLoading,setLoading] = useState(false);
 
     const handleLogin = (e) => {
         e.preventDefault();
+        setLoading(true);
         axios.post('login', loginData)
              .then(res => {
                     Cookies.set('access_token', res.data.data.access_token);
                     Cookies.set('user', JSON.stringify(res.data.data.user));
-
+                    successMessage('You are logged in');
                     router.push('/');
                 }
             ).catch(err => {
-                console.log(err);
+                showValidationErrors(err);
+            }).finally(() => {
+                setLoading(false);
             });
 
     }
@@ -28,6 +35,7 @@ export default function Login()
     return (
         // design a login page using react boostrap login form will be center in browser with input email , password and login button
         <div className="container">
+            <Toaster position="top-right"/>
             <div className="row mt-5">
                 <div className="col-md-6 m-auto">
                     <div className="card card-body">
@@ -43,7 +51,7 @@ export default function Login()
                                 <label htmlFor="password">Password</label>
                                 <input type="password" onChange={(e) => setForm({...loginData , password : e.target.value })} className="form-control" id="password" name="password" placeholder="Enter password" />
                             </div>
-                            <button type="submit" className="btn btn-primary btn-block">Login</button>
+                            <button type="submit" className="btn btn-primary btn-block">{isLoading ? 'Login....' : 'Login'}</button>
                         </form>
                     </div>
                 </div>

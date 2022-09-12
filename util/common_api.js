@@ -22,3 +22,11 @@ export function getAllInstitute()
     return axios.get(`/institute-list?no_pagination=yes`);
 
 }
+
+
+export function getUnreadNotificationCount()
+{
+
+    return axios.get(`/unread-notification-count`);
+
+}

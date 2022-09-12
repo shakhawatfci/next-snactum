@@ -92,8 +92,37 @@
           })
         }
 
-        function  goToNext() 
+        function onStudentChange(student)
         {
+          
+          let studentsArr = formData.students;
+          const index = studentsArr.indexOf(student.id);
+          if (index > -1) { // only splice array when item is found
+            studentsArr.splice(index, 1); // 2nd parameter means remove one item only
+          }
+          else
+          {
+            studentsArr.push(student.id);
+          }
+
+
+
+          setFormData({...formData,students : studentsArr });
+
+          if(studentsArr.length == 1) {
+            setFormData({...formData,teacher_id : student.teacher_id });
+          }
+
+          if(studentsArr.length == 0)
+          {
+            setFormData({...formData,teacher_id : "" });
+          }
+
+          console.log(formData.teacher_id);
+        }
+
+        function  goToNext() 
+        { 
           var errors = [];
           if(currentStep == 1)
           {
@@ -133,7 +162,7 @@
                 <div style={{marginTop:50}}>
                 <div className="row">
                     <div className="col-md-12">
-                        <h3 className="text-center">Create Session {formData.session_type} {formData.institute_id}</h3>
+                        <h3 className="text-center">Create Session</h3>
                     </div>
                 </div>
                 <form>
@@ -192,12 +221,12 @@
                             
                             {studentList.map((student,index) => {
                                 return (
-                                <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id={'flexCheckDefault'+index} />
-                                <label class="form-check-label" for={'flexCheckDefault'+index}>
+                                <div className="form-check" key={'studentList'+index}>
+                                <input className="form-check-input" onChange={() => onStudentChange(student) }  type="checkbox" value={student.id} id={'flexCheckDefault'+index} />
+                                <label className="form-check-label" for={'flexCheckDefault'+index}>
                                   {student.name}
                                 </label>
-                              </div>
+                                </div>
                                 )
                               })
                               }
@@ -207,7 +236,7 @@
                     </div>
                   </div>}
 
-                  <div className="row">
+                  <div className="row mt-3">
                       <div className="col-md-6 mx-auto">
                           <div className="form-group text-right">
                               <button type="button" onClick={goToNext} className="btn btn-outline-success">Next Step</button>

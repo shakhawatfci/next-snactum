@@ -48,7 +48,7 @@ export const sessionFormData = {
   institute_id:"",
   students:[],
   teacher_id:"",
-  milage:"",
+  milage:0,
   session_start_time:"",
   session_end_time:"",
   cost:"",

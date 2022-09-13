@@ -6,6 +6,9 @@
       import apiInstance from "../util/server";
       import { FaPray } from "react-icons/fa";
       import MetaHeader from "../components/MetaHeader";
+      import Skeleton from 'react-loading-skeleton'
+      import DatePicker from "react-datepicker";
+
       
       export default function createSession()
       {
@@ -120,6 +123,18 @@
 
         }
 
+        function onStartDateChange(date)
+        {
+          console.log(date);
+          setFormData({...formData,session_start_time : date})
+        }
+
+        function onEndDateChange(date)
+        {
+          console.log(date);
+          setFormData({...formData,session_end_time : date})
+        }
+
         function  goToNext() 
         { 
           var errors = [];
@@ -168,6 +183,8 @@
         {
           setStep(currentStep-1);
         }
+
+
 
         
         
@@ -245,11 +262,11 @@
                            </div>}
 
                            {loader.studentLoader && <div className="form-group">
-                              <h5>Loading students.....</h5>
+                              <Skeleton count={5} />
                            </div> }
 
                            {!loader.studentLoader && <div className="studentBox" style={{ overflowY:'auto',maxHeight : 300 }}>
-                            
+                            <p>Choose Student</p>
                             {studentList.map((student,index) => {
                                 return (
                                 <div className="form-check" key={'studentList'+index}>
@@ -278,6 +295,28 @@
                                 <input type="text" className="form-control" 
                                 disabled={formData.session_medium == 'Virtual' ? true : false} 
                                 value={formData.session_medium == 'In Person' ? formData.milage : 0}/>
+                            </div>
+                            <div className="form-group mb-2">
+                                <label>Start Date</label>
+                                <DatePicker showTimeSelect 
+                                dateFormat="MMMM, d Y H:mm" 
+                                className="form-control"
+                                name="session_start_time"
+                                selected={formData.session_start_time}
+                                onChange={(date) => onStartDateChange(date)} />
+                            </div>
+                            <div className="form-group mb-2">
+                                <label>End Date</label>
+                                <DatePicker showTimeSelect 
+                                dateFormat="MMMM, d Y H:mm" 
+                                className="form-control"
+                                name="session_end_time"
+                                selected={formData.session_end_time}
+                                onChange={(date) => onEndDateChange(date)} />
+                            </div>
+                            <div className="form-group mb-2">
+                                <label>Duration <span className="badge badge-soft-secondary bg-secondary">1h : 0m</span> </label>
+                                
                             </div>
                          </div>
                       </div>

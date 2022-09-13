@@ -37,8 +37,17 @@ export default function Login()
         <div className="container">
             <Toaster position="top-right"/>
             <div className="row mt-5">
-                <div className="col-md-6 m-auto">
-                    <div className="card card-body">
+
+                <div className="col-md-6 d-md-block d-sm-none d-lg-block d-xl-block d-none">
+                   <img src="./login_bg_1.svg" />
+                </div>
+
+                <div className="col-md-6" style={{marginTop:'auto',marginBottom:'auto'}}>
+
+                    <div className="card card-body ">
+                        <div className="logo text-center">
+                        <img src="http://tutor.publicdemo.xyz/assets/images/rocketprep-logo-sm.png" style={{width:100}} />
+                        </div>
                         <h3 className="text-center mb-3">
                             <i className="fas fa-user-circle"></i> Login
                         </h3>

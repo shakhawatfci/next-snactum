@@ -74,10 +74,15 @@ function MainNav() {
           <Navbar.Text>
             {/* <Link> */}
             <DropdownButton id="dropdown-basic-button" variant="outline-success" title={auth.user.name}>
-                          <Dropdown.Item >
-                          {/* <a title='Unread Notification' href=""></a> */}
-                          <FaBell/> &nbsp; Notification <span>{notificationCounter}</span> 
+                          <Dropdown.Item className='position-relative' >
+                          <FaBell/> &nbsp; Notification
+                          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                           {notificationCounter}
+                            <span class="visually-hidden">unread messages</span>
+                          </span>
+                           
                           </Dropdown.Item>
+
                           <Dropdown.Item onClick={(e) => {logout(e)}} >
                           <span><FaSignOutAlt/> &nbsp; Sign out</span>
                           </Dropdown.Item>

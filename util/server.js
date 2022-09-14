@@ -5,6 +5,7 @@ import Cookies from 'js-cookie'
 
 
 axios.defaults.baseURL =  "https://tutor.publicdemo.xyz/api/v1/";
+// axios.defaults.baseURL =  "http://127.0.0.1:8000/api/v1/";
 
 const apiInstance = axios.create()
 

@@ -14,6 +14,7 @@
   import SessionFilter from "../components/session/SessionFilter";
   // import Cookies from "js-cookie";
   import MetaHeader from "../components/MetaHeader";
+  import { format } from "date-fns";
   const initState = {
       teacher_id : '',
       session_for : '',
@@ -124,8 +125,8 @@
                       <tr key={index}>
                           <td>{session.teacher.name}</td>
                           <td>
-                           <p>{session.session_end_time}</p>
-                           <p>{session.session_start_time}</p> 
+                           <p>{format(new Date(session.session_start_time),'MMMM, d Y H:mm')}</p> 
+                           <p>{format(new Date(session.session_end_time),'MMMM, d Y H:mm')}</p>
                           </td>
                           <td>
                             {session.student_list.length == 1 ? session.student_list[0].name  : `${session.student_list[0].name} + (${session.student_list.length-1})`   }

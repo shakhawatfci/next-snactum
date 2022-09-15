@@ -6,6 +6,7 @@
   import Dropdown from 'react-bootstrap/Dropdown';
   import DropdownButton from 'react-bootstrap/DropdownButton';
   import { FaAlignRight } from "react-icons/fa";
+  import Skeleton from 'react-loading-skeleton'
 
   import Router, { withRouter , useRouter } from 'next/router'
   import { successMessage , errorMessage } from "../util/helper";
@@ -149,7 +150,7 @@
                     </tbody>
 
                   </table>
-                </div>) : (<div> <h3>Loading...</h3> </div>) }
+                </div>) : (<div> <Skeleton count={15} /> </div>) }
                 <div className="d-flex justify-content-end mt-2">
                 
                     <Pagination

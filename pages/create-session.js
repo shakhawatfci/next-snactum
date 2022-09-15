@@ -256,7 +256,7 @@
             router.push('/session');
           }).catch((err) => {
              showValidationErrors(err);
-          }).finally(setLoader({...loader,formLoading : false}))
+          }).finally(() => setLoader({...loader,formLoading : false}))
         }
 
 

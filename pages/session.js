@@ -9,7 +9,7 @@
   import Skeleton from 'react-loading-skeleton'
 
   import Router, { withRouter , useRouter } from 'next/router'
-  import { successMessage , errorMessage } from "../util/helper";
+  import { successMessage , errorMessage , showValidationErrors } from "../util/helper";
 
   import Link from "next/link";
   import SessionFilter from "../components/session/SessionFilter";
@@ -66,6 +66,24 @@
           }).finally(() => {
             updateLoader(false);
           });
+
+      }
+
+
+      const deleteSession = (id) => {
+          
+        if(confirm('Are you sure to delete ?'))
+        {
+          axios.delete('session/'+id).then(response => {
+            successMessage('Session Deleted successfully');
+            getSessionList();
+         })
+         .catch(err => {
+             showValidationErrors(err);
+         })
+
+        }
+         
 
       }
 
@@ -138,7 +156,7 @@
                           <td>{session.invoice_status}</td>
                           <td className="text-end">
                           <DropdownButton id="dropdown-basic-button" variant="outline-secondary" title={<FaAlignRight />}>
-                          <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                          <Dropdown.Item onClick={() => { deleteSession(session.id) }}>Delete</Dropdown.Item>
                           <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
                           <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
                           </DropdownButton>

@@ -8,7 +8,6 @@
       import MetaHeader from "../components/MetaHeader";
       import Skeleton from 'react-loading-skeleton'
       import DatePicker from "react-datepicker";
-      import axios from "axios";
       import { useRouter } from "next/router";
       import { format } from 'date-fns';
 
@@ -453,7 +452,7 @@
                               {currentStep > 1 && <button type="button" onClick={backStep}
                               className="btn btn-outline-danger" style={{marginRight:10}}>Previous Step</button> }
                               {currentStep < 4 && <button type="button" onClick={goToNext} className="btn btn-outline-success mx-auto">Next Step</button> }
-                              {currentStep == 4 && <button type="submit"  className="btn btn-outline-success mx-auto">
+                              {currentStep == 4 && <button type="submit" disabled={loader.formLoading ? true : false}  className="btn btn-outline-success mx-auto">
                                 { loader.formLoading ? <FaSpinner/> : 'Save' }
                               </button> }
                           </div>

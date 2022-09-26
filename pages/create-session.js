@@ -376,6 +376,7 @@
                                 dateFormat="MMMM, d Y H:mm" 
                                 className="form-control"
                                 name="session_start_time"
+                                minDate={new Date()}
                                 selected={formData.session_start_time}
                                 onChange={(date) => onStartDateChange(date)} />
                             </div>
@@ -385,6 +386,7 @@
                                 dateFormat="MMMM, d Y H:mm" 
                                 className="form-control"
                                 name="session_end_time"
+                                minDate={new Date()}
                                 selected={formData.session_end_time}
                                 onChange={(date) => onEndDateChange(date)} />
                             </div>

@@ -1,7 +1,6 @@
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 import Link from 'next/link'
 import { FaSignOutAlt , FaAlignRight , FaBell } from "react-icons/fa";
 import Cookies from 'js-cookie';
@@ -74,7 +73,7 @@ function MainNav() {
           <Navbar.Text>
             {/* <Link> */}
             <DropdownButton id="dropdown-basic-button" variant="outline-success" title={auth.user.name}>
-                          <Dropdown.Item className='position-relative' >
+                          <Dropdown.Item className='position-relative' onClick={(e) => { router.push('/notifications'); }}  >
                           <FaBell/> &nbsp; Notification
                           <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                            {notificationCounter}

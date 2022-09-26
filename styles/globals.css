@@ -27,6 +27,19 @@
     line-height: 70px;
     font-size: 35px;
   }
+  .notification-counter {
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    text-align: center;
+    line-height: 30px;
+    font-size: 20px;
+    transition: 1s;
+  }
+
+
+
+
 
   .counter-green {
     background-color:rgb(177, 247, 218);
